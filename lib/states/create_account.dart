@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shopping/utility/my_constant.dart';
+import 'package:shopping/utility/my_dialog.dart';
 import 'package:shopping/widgets/show_image.dart';
 import 'package:shopping/widgets/show_title.dart';
 
@@ -16,6 +18,27 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
   File? file;
+
+  @override
+  void initState() {
+    super.initState();
+    findLatLang();
+  }
+
+  Future<Null> findLatLang() async {
+    try {
+      bool locationService;
+      LocationPermission locationPermission;
+
+      locationService = await Geolocator.isLocationServiceEnabled();
+      if (locationService) {
+        print('Service Location open');
+      } else {
+        print('Service Location Close');
+        Mydialog().alertLocationService(context);
+      }
+    } catch (e) {}
+  }
 
   Row buildName(double size) {
     return Row(
